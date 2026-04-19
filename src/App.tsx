@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/Logo";
@@ -6,26 +5,6 @@ import { Loader } from "@/components/Loader";
 import { ResultView } from "@/components/ResultView";
 import { compareWithGroq, getEnvApiKey } from "@/lib/groq";
 import { storage, type ComparisonResult, type HistoryEntry } from "@/lib/storage";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "RivalAI - Compara cualquier cosa con IA" },
-      {
-        name: "description",
-        content:
-          "Compara tecnologias, productos, ideas o metodos con IA. Decide con datos, no con dudas.",
-      },
-      { property: "og:title", content: "RivalAI - Compara cualquier cosa con IA" },
-      {
-        property: "og:description",
-        content:
-          "Herramienta de comparacion universal potenciada por Groq. Pros, contras, criterios y veredicto.",
-      },
-    ],
-  }),
-  component: HomePage,
-});
 
 const CATEGORIES = ["General", "Tecnologia", "Entretenimiento", "Ciencia", "Productos", "Salud"];
 const CHIPS = [
@@ -50,7 +29,7 @@ function parseChip(s: string): [string, string] | null {
   return [parts[0].trim(), parts[1].trim()];
 }
 
-function HomePage() {
+export default function App() {
   const hasConfiguredApiKey = Boolean(getEnvApiKey());
   const [a, setA] = useState("");
   const [b, setB] = useState("");

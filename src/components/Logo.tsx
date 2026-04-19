@@ -1,9 +1,7 @@
-import { Link } from "@tanstack/react-router";
-
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <Link
-      to="/"
+    <a
+      href="/"
       className={`font-display text-2xl sm:text-3xl tracking-tight inline-flex items-center gap-1.5 ${className}`}
       aria-label="RivalAI inicio"
     >
@@ -12,6 +10,6 @@ export function Logo({ className = "" }: { className?: string }) {
       </span>
       <span className="text-foreground leading-none">AI</span>
       <span className="ml-1 h-2.5 w-2.5 bg-acid animate-flicker" />
-    </Link>
+    </a>
   );
 }
