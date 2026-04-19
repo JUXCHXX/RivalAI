@@ -61,20 +61,20 @@ export function ApiKeyModal({
                 </>
               ) : (
                 <>
-                  Pega tu API Key de Google AI Studio. Se guarda <strong className="text-foreground">solo en tu navegador</strong> (localStorage).
+                  Pega tu API Key de Groq. Se guarda <strong className="text-foreground">solo en tu navegador</strong> (localStorage).
                 </>
               )}
             </p>
 
             <label className="block font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
-              ▸ GOOGLE GEMINI API KEY
+              ▸ GROQ API KEY
             </label>
             <div className="relative">
               <input
                 type={show ? "text" : "password"}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                placeholder="AIza..."
+                placeholder="sk-..."
                 className="w-full bg-background border-2 border-foreground px-4 py-3 pr-20 text-sm font-mono focus:outline-none focus:bg-foreground focus:text-background transition"
                 autoFocus
               />
@@ -88,7 +88,7 @@ export function ApiKeyModal({
             </div>
 
             <a
-              href="https://aistudio.google.com/app/apikey"
+              href="https://console.groq.com/keys"
               target="_blank"
               rel="noreferrer"
               className="inline-block mt-3 text-xs font-mono uppercase tracking-wider underline decoration-2 underline-offset-4 hover:text-acid transition"

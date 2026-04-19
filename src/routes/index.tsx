@@ -5,7 +5,7 @@ import { Logo } from "@/components/Logo";
 import { ApiKeyModal } from "@/components/ApiKeyModal";
 import { Loader } from "@/components/Loader";
 import { ResultView } from "@/components/ResultView";
-import { compareWithGemini } from "@/lib/gemini";
+import { compareWithGroq } from "@/lib/groq";
 import { storage, type ComparisonResult, type HistoryEntry } from "@/lib/storage";
 
 export const Route = createFileRoute("/")({
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Herramienta de comparación universal potenciada por Google Gemini. Pros, contras, criterios y veredicto.",
+          "Herramienta de comparación universal potenciada por Groq. Pros, contras, criterios y veredicto.",
       },
     ],
   }),
@@ -40,7 +40,7 @@ const CHIPS = [
 
 const MARQUEE = [
   "COMPARA · DECIDE · GANA",
-  "POTENCIADO POR GEMINI",
+  "POTENCIADO POR GROQ",
   "DOS OPCIONES · UN VEREDICTO",
   "SIN DUDAS · CON DATOS",
 ];
@@ -96,7 +96,7 @@ function HomePage() {
     if (overrideB !== undefined) setB(opt2);
 
     try {
-      const r = await compareWithGemini({ apiKey, opcion1: opt1, opcion2: opt2, category });
+      const r = await compareWithGroq({ apiKey, opcion1: opt1, opcion2: opt2, category });
       setResult(r);
       const entry: HistoryEntry = {
         id: `${Date.now()}`,
@@ -408,7 +408,7 @@ function HomePage() {
 
         <footer className="mt-24 border-t-2 border-foreground pt-6 grid sm:grid-cols-3 gap-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
           <div>© RIVALAI · {new Date().getFullYear()}</div>
-          <div className="sm:text-center">▸ POWERED BY GOOGLE GEMINI</div>
+          <div className="sm:text-center">▸ POWERED BY GROQ</div>
           <div className="sm:text-right">{storage.hasEnvKey() ? "KEY: ENV" : "KEY: LOCAL ONLY"}</div>
         </footer>
       </main>

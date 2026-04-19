@@ -30,7 +30,7 @@ const KEY_HISTORY = "rivalai.history";
 
 const ENV_KEY =
   (typeof import.meta !== "undefined" &&
-    (import.meta.env?.VITE_GEMINI_API_KEY as string | undefined)?.trim()) ||
+    (import.meta.env?.VITE_GROQ_API_KEY as string | undefined)?.trim()) ||
   "";
 
 export const storage = {
