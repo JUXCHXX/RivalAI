@@ -25,29 +25,9 @@ export type HistoryEntry = {
   result: ComparisonResult;
 };
 
-const KEY_API = "rivalai.apikey";
 const KEY_HISTORY = "rivalai.history";
 
-const ENV_KEY =
-  (typeof import.meta !== "undefined" &&
-    (import.meta.env?.VITE_GROQ_API_KEY as string | undefined)?.trim()) ||
-  "";
-
 export const storage = {
-  hasEnvKey(): boolean {
-    return Boolean(ENV_KEY);
-  },
-  getApiKey(): string {
-    if (ENV_KEY) return ENV_KEY;
-    if (typeof window === "undefined") return "";
-    return localStorage.getItem(KEY_API) ?? "";
-  },
-  setApiKey(key: string) {
-    localStorage.setItem(KEY_API, key.trim());
-  },
-  clearApiKey() {
-    localStorage.removeItem(KEY_API);
-  },
   getHistory(): HistoryEntry[] {
     if (typeof window === "undefined") return [];
     try {

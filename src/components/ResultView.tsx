@@ -34,13 +34,7 @@ function ScoreBar({
   );
 }
 
-function ProsCons({
-  pros,
-  contras,
-}: {
-  pros: string[];
-  contras: string[];
-}) {
+function ProsCons({ pros, contras }: { pros: string[]; contras: string[] }) {
   return (
     <div className="space-y-5 mt-6">
       <div>
@@ -158,9 +152,7 @@ export function ResultView({
         <div className="absolute -top-3 left-6 bg-foreground text-background font-mono text-[10px] uppercase tracking-[0.25em] px-3 py-1">
           RESUMEN
         </div>
-        <p className="text-base sm:text-xl leading-snug font-medium pt-1">
-          “{result.resumen}”
-        </p>
+        <p className="text-base sm:text-xl leading-snug font-medium pt-1">“{result.resumen}”</p>
       </motion.div>
 
       {/* Score columns */}
@@ -172,9 +164,7 @@ export function ResultView({
           className="brutal brutal-cyan p-6 sm:p-7"
         >
           <div className="flex items-baseline justify-between gap-3 mb-1">
-            <h3 className="font-display text-2xl sm:text-3xl text-primary truncate">
-              {opcion1}
-            </h3>
+            <h3 className="font-display text-2xl sm:text-3xl text-primary truncate">{opcion1}</h3>
             <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground shrink-0">
               01
             </span>
@@ -191,9 +181,7 @@ export function ResultView({
           className="brutal brutal-violet p-6 sm:p-7"
         >
           <div className="flex items-baseline justify-between gap-3 mb-1">
-            <h3 className="font-display text-2xl sm:text-3xl text-secondary truncate">
-              {opcion2}
-            </h3>
+            <h3 className="font-display text-2xl sm:text-3xl text-secondary truncate">{opcion2}</h3>
             <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground shrink-0">
               02
             </span>

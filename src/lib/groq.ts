@@ -1,17 +1,27 @@
 import type { ComparisonResult } from "./storage";
 
 const ENV_KEY = (import.meta.env.VITE_GROQ_API_KEY as string | undefined)?.trim() || "";
-const MODEL = (import.meta.env.VITE_GROQ_MODEL as string | undefined)?.trim() || "llama-3.3-70b-versatile";
+const MODEL =
+  (import.meta.env.VITE_GROQ_MODEL as string | undefined)?.trim() || "llama-3.3-70b-versatile";
 const ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
 
 export function getEnvApiKey() {
   return ENV_KEY;
 }
 
+function hasTextPart(value: unknown): value is { text: string } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "text" in value &&
+    typeof (value as { text?: unknown }).text === "string"
+  );
+}
+
 function buildPrompt(a: string, b: string, category: string, locale: string) {
-  const cat = category && category !== "General" ? ` (categoría: ${category})` : "";
-  return `Eres un analista experto. Compara de forma rigurosa y útil "${a}" vs "${b}"${cat}.
-Responde EXCLUSIVAMENTE con un JSON válido (sin markdown, sin texto extra) en el idioma "${locale}", con esta estructura EXACTA:
+  const cat = category && category !== "General" ? ` (categoria: ${category})` : "";
+  return `Eres un analista experto. Compara de forma rigurosa y util "${a}" vs "${b}"${cat}.
+Responde EXCLUSIVAMENTE con un JSON valido (sin markdown, sin texto extra) en el idioma "${locale}", con esta estructura EXACTA:
 
 {
   "resumen": "2-3 oraciones impactantes",
@@ -24,28 +34,30 @@ Responde EXCLUSIVAMENTE con un JSON válido (sin markdown, sin texto extra) en e
   "contras_opcion2": ["string", "string"],
   "puntuacion_opcion1": 0-100,
   "puntuacion_opcion2": 0-100,
-  "recomendacion": "Cuál elegir según contexto, 2-3 frases",
+  "recomendacion": "Cual elegir segun contexto, 2-3 frases",
   "veredicto_ganador": "${a}" | "${b}" | "Empate"
 }
 
-Genera entre 5 y 8 criterios relevantes según el tipo de cosa que se compara. Sé concreto, evita relleno.`;
+Genera entre 5 y 8 criterios relevantes segun el tipo de cosa que se compara. Se concreto, evita relleno.`;
 }
 
 export async function compareWithGroq(opts: {
-  apiKey: string;
   opcion1: string;
   opcion2: string;
   category: string;
 }): Promise<ComparisonResult> {
-  const { apiKey, opcion1, opcion2, category } = opts;
-  const locale =
-    (typeof navigator !== "undefined" && navigator.language) || "es-ES";
+  const { opcion1, opcion2, category } = opts;
+  const locale = (typeof navigator !== "undefined" && navigator.language) || "es-ES";
+
+  if (!ENV_KEY) {
+    throw new Error("Falta VITE_GROQ_API_KEY en el archivo .env del proyecto.");
+  }
 
   const res = await fetch(ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${ENV_KEY}`,
     },
     body: JSON.stringify({
       model: MODEL,
@@ -70,10 +82,14 @@ export async function compareWithGroq(opts: {
       /* ignore */
     }
     if (res.status === 401 || res.status === 403 || /API key/i.test(msg)) {
-      throw new Error("API key inválida. Revisa tu clave en ⚙️ o en el archivo .env.");
+      throw new Error(
+        "API key invalida. Revisa VITE_GROQ_API_KEY en el archivo .env del proyecto.",
+      );
     }
     if (res.status === 429) {
-      throw new Error("Has superado el límite de la API Groq. Intenta de nuevo más tarde o revisa tu cuota.");
+      throw new Error(
+        "Has superado el limite de la API Groq. Intenta de nuevo mas tarde o revisa tu cuota.",
+      );
     }
     throw new Error(msg);
   }
@@ -85,21 +101,22 @@ export async function compareWithGroq(opts: {
   if (typeof message?.content === "string") {
     text = message.content;
   } else if (Array.isArray(message?.content)) {
-    const firstPart = message.content.find((part: any) => typeof part?.text === "string");
+    const firstPart = message.content.find(hasTextPart);
     text = firstPart?.text ?? "";
-  } else if (typeof message?.content?.text === "string") {
+  } else if (hasTextPart(message?.content)) {
     text = message.content.text;
   }
 
-  if (!text) throw new Error("La IA no devolvió contenido.");
+  if (!text) throw new Error("La IA no devolvio contenido.");
 
   let parsed: ComparisonResult;
   try {
     parsed = JSON.parse(text);
   } catch {
     const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("Respuesta de la IA no es JSON válido.");
+    if (!match) throw new Error("Respuesta de la IA no es JSON valido.");
     parsed = JSON.parse(match[0]);
   }
+
   return parsed;
 }

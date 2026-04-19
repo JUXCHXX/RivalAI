@@ -33,7 +33,10 @@ export const Route = createRootRoute({
       { name: "description", content: "Herramienta de comparación universal potenciada por IA." },
       { name: "author", content: "RivalAI" },
       { property: "og:title", content: "RivalAI — Compara cualquier cosa con IA" },
-      { property: "og:description", content: "Herramienta de comparación universal potenciada por IA." },
+      {
+        property: "og:description",
+        content: "Herramienta de comparación universal potenciada por IA.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@RivalAI" },
